@@ -5,8 +5,6 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 const Container = styled.div``;
 
@@ -117,20 +115,9 @@ const Button = styled.button`
   }
 `;
 
-const Product = ({cat,filters,sort}) => {
+const Product = () => {
 
-  const [products, setProducts] = useState([]);
-  const [filteredProducts , setFilteredProduct] = useState([]);
-
-  useEffect(()=>{
-    const getProducts = async ()=>{
-      try{
-        const res = await axios.get("http://localhost:3000/api/products");
-        console.log(res)
-      }catch(err){}
-    };
-    getProducts();
-  },[cat])
+  
 
   return (
     <Container>
