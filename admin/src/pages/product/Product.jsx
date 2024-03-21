@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import "./product.css";
 import Chart from "../../components/chart/Chart";
-import { productData } from "../../dummyData";
-import { Publish } from "@material-ui/icons";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+// import { productData } from "../../dummyData";
+import { Publish } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { userRequest } from "../../RequestMethods";
