@@ -28,7 +28,7 @@ export default function NewProduct() {
   };
 
 
-  const handleClick = () =>{
+  const handleClick = (e) =>{
     e.preventDefault();
 
     const fileName = new Date().getTime() + file.name;

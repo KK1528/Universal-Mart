@@ -5,6 +5,8 @@ import { productData } from "../../dummyData";
 import { Publish } from "@material-ui/icons";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { userRequest } from "../../RequestMethods";
 
 export default function Product() {
   const location = useLocation();
