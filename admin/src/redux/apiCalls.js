@@ -25,6 +25,12 @@ export const login = async (dispatch, user) => {
   }
 };
 
+export const logout = async (dispatch) => {
+  // Perform logout action, for example, clearing user data from state
+  // Dispatch an action to reset the user state
+  dispatch({ type: 'LOGOUT' }); // You need to define appropriate action type in userRedux.js
+};
+
 export const getProducts = async (dispatch) => {
   dispatch(getProductStart());
   try {
