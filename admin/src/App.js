@@ -1,44 +1,58 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Sidebar from "./components/sidebar/Sidebar";
 import Topbar from "./components/topbar/Topbar";
 import "./App.css";
 import Home from "./pages/home/Home";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
 import UserList from "./pages/userList/UserList";
-import User from "./pages/user/User";
-import NewUser from "./pages/newUser/NewUser";
-import ProductList from "./pages/productList/ProductList";
-import Product from "./pages/product/Product";
-import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/login";
-import { useSelector } from "react-redux";
 
 function App() {
-  const admin = useSelector((state) => state.user.currentUser.isAdmin);
+  const isAuthenticated = useSelector((state) => state.user.currentUser !== null);
+  const isAdmin = useSelector((state) => state.user.currentUser?.isAdmin);
+
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
-      <Topbar />
-        {admin && (
-          <>
-            <div className="container">
-              <Sidebar />
-              <Route exact path="/" element={<Home />} />
-              <Route path="/users" element={<UserList />} />
-              <Route path="/user/:userId" element={<User />} />
-              <Route path="/newUser" element={<NewUser />} />
-              <Route path="/products" element={<ProductList />} />
-              <Route path="/product/:productId" element={<Product />} />
-              <Route path="/newproduct" element={<NewProduct />} />
-            </div>
-          </>
-        )}
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+        />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <PrivateRoutes isAdmin={isAdmin} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
       </Routes>
     </Router>
+  );
+}
+
+// PrivateRoutes component to handle authenticated routes
+function PrivateRoutes({ isAdmin }) {
+  return (
+    <>
+      <Topbar />
+      <div className="container">
+        <Sidebar />
+        {/* Routes accessible to admin */}
+        {isAdmin ? (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/users" element={<UserList />} />
+            {/* Add more admin routes here */}
+          </>
+        ) : (
+          <Navigate to="/" /> // Redirect non-admin users to home
+        )}
+      </div>
+    </>
   );
 }
 
