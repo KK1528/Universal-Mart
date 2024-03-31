@@ -4,6 +4,8 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
+import {useSelector} from 'react-redux';
+import {useHistory} from 'react-router';
 
 
 const Container = styled.div``;
@@ -155,6 +157,11 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+
+  const cart = useSelector(state=>state.cart);
+  const history = useHistory();
+
+
   return (
     <Container>
       <Navbar />
