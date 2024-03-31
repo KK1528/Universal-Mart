@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {mobile} from "../responsive";
 import {useSelector , useDispatch} from 'react-redux';
 import {useState} from 'react';
+import {login} from '../redux/apiCalls'
 
 const Container = styled.div`
   width: 100vw;
@@ -71,8 +72,8 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(dispatch, { username, password });
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch (err) {
+      console.error("Login failed:", err);
     }
   }
 
