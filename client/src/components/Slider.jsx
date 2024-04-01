@@ -37,7 +37,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   transition: all 1.5s ease;
-  transform: translateX(${(props) => props.slideIndex * -100}vw);
+  transform: translateX(${(props) => props.slideindex * -100}vw);
 `;
 
 const Slide = styled.div`
@@ -45,7 +45,7 @@ const Slide = styled.div`
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: #${(props) => props.bg};
+  background-color: ${(props) => `${props.$bg}`};
 `;
 
 const ImgContainer = styled.div`
@@ -95,7 +95,7 @@ const Slider = () => {
       <Arrow direction="left" onClick={() => handleClick("left")}>
         <ArrowCircleLeftOutlinedIcon />
       </Arrow>
-      <Wrapper slideIndex={slideIndex}>
+      <Wrapper slideindex={slideIndex}>
         {sliderItems.map((item) => (
           <Slide bg={item.bg} key={item.id}>
             <ImgContainer>

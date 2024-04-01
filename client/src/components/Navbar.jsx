@@ -1,15 +1,17 @@
 import React from "react";
-import Badge from '@mui/material/Badge';
+import Badge from "@mui/material/Badge";
 import styled from "styled-components";
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 import { Search } from "@mui/icons-material";
+import LogoutIcon from '@mui/icons-material/Logout';
 import { mobile } from "../responsive";
-import { Link } from "@react-router-dom";
-import {useSelector} from 'react-redux';
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {logoutUser} from '../redux/apiCalls'
 
 const Container = styled.div`
   height: 60px;
-  background-color:pink;
+  background-color: pink;
   ${mobile({ height: "50px" })}
 `;
 
@@ -34,17 +36,17 @@ const Language = styled.span`
 `;
 
 const SearchContainer = styled.div`
-  width:25vw;
+  width: 25vw;
   border: 0.5px solid lightgray;
   display: flex;
   align-items: center;
   margin-left: 25px;
   padding: 5px;
-  background-color:white;
+  background-color: white;
 `;
 
 const Input = styled.input`
-  width:24vw;
+  width: 24vw;
   border: none;
   ${mobile({ width: "50px" })}
 `;
@@ -74,8 +76,14 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
+  const quantity = useSelector((state) => state.cart.quantity);
+  const logedin = useSelector((state) => state.user.currentUser);
+  
+  const dispatch = useDispatch();
 
-  const quantity = useSelector(state=>state.cart.quantity)
+  const handleClick = () =>{
+    dispatch(logoutUser());
+  }
 
   return (
     <Container>
@@ -88,18 +96,30 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Logo>KK</Logo>
+          <Link to='' style={{textDecoration:'none'}}><Logo>KK</Logo></Link>
         </Center>
         <Right>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem>
-          <Link to='/Cart'>
-          <MenuItem>
-            <Badge badgeContent={quantity} color="primary">
-              <ShoppingCartOutlined />
-            </Badge>
-          </MenuItem>
-          </Link>
+          {!logedin && (
+            <Link to="">
+              <MenuItem>REGISTER</MenuItem>
+            </Link>
+          )}
+          {!logedin && (
+            <Link to="">
+              <MenuItem>SIGN IN</MenuItem>
+            </Link>
+          )}
+
+          {logedin && (
+            <MenuItem>
+              <Badge badgeContent={quantity} color="primary">
+                <Link to="/Cart">
+                  <ShoppingCartOutlined />
+                </Link>
+              </Badge>
+            </MenuItem>
+          )}
+          {logedin && <MenuItem onClick={handleClick}><LogoutIcon/></MenuItem>}
         </Right>
       </Wrapper>
     </Container>
