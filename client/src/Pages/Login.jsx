@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import {mobile} from "../responsive";
-import {useSelector , useDispatch} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {useState} from 'react';
 import {login} from '../redux/apiCalls'
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -53,7 +54,7 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 
-const Link = styled.a`
+const Linkstyle = styled.a`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
@@ -66,7 +67,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const {isFetching , error} = useSelector(state=>state.user);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -86,8 +86,8 @@ const Login = () => {
           <Input placeholder="username" onChange = {(e)=>setUsername(e.target.value)}/>
           <Input placeholder="password" onChange = {(e)=>setPassword(e.target.value)}/>
           <Button onClick={handleClick}>LOGIN</Button>
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link>CREATE A NEW ACCOUNT</Link>
+          <Linkstyle>DO NOT YOU REMEMBER THE PASSWORD?</Linkstyle>
+          <Linkstyle><Link to='/register'>CREATE A NEW ACCOUNT</Link></Linkstyle>
         </Form>
       </Wrapper>
     </Container>

@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {logoutUser} from '../redux/apiCalls'
+import { logout } from "../redux/userRedux";
 
 const Container = styled.div`
   height: 60px;
@@ -76,13 +76,12 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
+  const user = useSelector(state=>state.user.currentUser);
   const quantity = useSelector((state) => state.cart.quantity);
-  const logedin = useSelector((state) => state.user.currentUser);
-  
   const dispatch = useDispatch();
 
-  const handleClick = () =>{
-    dispatch(logoutUser());
+  const handleLogout = () =>{
+    dispatch(logout());
   }
 
   return (
@@ -96,21 +95,21 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Link to='' style={{textDecoration:'none'}}><Logo>KK</Logo></Link>
+          <Link to='/' style={{textDecoration:'none'}}><Logo>KK</Logo></Link>
         </Center>
         <Right>
-          {!logedin && (
-            <Link to="">
+          {!user && (
+            <Link to="/Register" style={{textDecoration:'none'}}>
               <MenuItem>REGISTER</MenuItem>
             </Link>
           )}
-          {!logedin && (
-            <Link to="">
+          {!user && (
+            <Link to="/Login" style={{textDecoration:'none'}}>
               <MenuItem>SIGN IN</MenuItem>
             </Link>
           )}
 
-          {logedin && (
+          {user && (
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
                 <Link to="/Cart">
@@ -119,7 +118,7 @@ const Navbar = () => {
               </Badge>
             </MenuItem>
           )}
-          {logedin && <MenuItem onClick={handleClick}><LogoutIcon/></MenuItem>}
+          {user && <MenuItem onClick={handleLogout}><LogoutIcon/></MenuItem>}
         </Right>
       </Wrapper>
     </Container>

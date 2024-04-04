@@ -1,42 +1,42 @@
 export const sliderItems = [
   {
     id: 1,
-    img: "https://i.ibb.co/XsdmR2c/1.png",
-    title: "SUMMER SALE",
+    img: "https://i.ibb.co/cXFnLLV/3.png",
+    title: "LOUNGEWEAR LOVE",
     desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-    bg: "f5fafd",
+    bg: "fbf0f4",
   },
   {
     id: 2,
-    img: "https://i.ibb.co/DG69bQ4/2.png",
+    img: "https://img.freepik.com/free-photo/close-up-bright-positve-portrait-trendy-blogger-influencer-blonde-woman-wearing-bright-outfit-sunglasses-posing-near-blue-wall_291049-2873.jpg?t=st=1712095506~exp=1712099106~hmac=8bcc2e980fea28e554749c243f424652aa92b11f29fc55260377f16ea07396b0&w=2000",
     title: "AUTUMN COLLECTION",
     desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
     bg: "fcf1ed",
   },
   {
     id: 3,
-    img: "https://i.ibb.co/cXFnLLV/3.png",
-    title: "LOUNGEWEAR LOVE",
+    img: "https://img.freepik.com/free-photo/cheerful-cool-girl-with-curly-hair-white-glasses-long-sleeve-shirt-eating-red-apple-posing-with-straw-bag-pink-backdrop_197531-27545.jpg?w=1060&t=st=1712095194~exp=1712095794~hmac=941a100669126006f7194bf997218d5df24546e657badf51d6d1fca459b24e14",
+    title: "SUMMER SALE",
     desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-    bg: "fbf0f4",
+    bg: "f5fafd",
   },
 ];
 
 export const categories = [
   {
-    id: 1,
+    _id: 1,
     img: "https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
     title: "SHIRT STYLE!",
     cat:"women"
   },
   {
-    id: 2,
+    _id: 2,
     img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
     title: "LOUNGEWEAR LOVE",
     cat:"coat"
   },
   {
-    id: 3,
+    _id: 3,
     img: "https://images.pexels.com/photos/5480696/pexels-photo-5480696.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     title: "LIGHT JACKETS",
     cat:"jeans"

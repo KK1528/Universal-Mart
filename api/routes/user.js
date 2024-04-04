@@ -1,5 +1,5 @@
 const user = require("../models/user");
-const {verifytoken, verifytokenandAuthorization, verifytokenandAdmin} = require("./verifytoken");
+const { verifytokenandAuthorization, verifytokenandAdmin} = require("./verifytoken");
 const router = require("express").Router();
 const CryptoJS = require("crypto-js")
 
@@ -41,12 +41,11 @@ router.get("/find/:id" , verifytokenandAdmin , async (req,res)=>{
 
 //GET ALL USER
 router.get("/" , verifytokenandAdmin , async (req,res)=>{
-    const query = req.query.new;
-    try{
-        const userrs = query ? await user.find().sort({_id:-1}).limit(1) : await user.findById();
-        res.status(200).json(userrs);
-    }catch{
-        res.status(500).json(err)
+    try {
+        const users = await user.find();
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 })
 
@@ -56,7 +55,7 @@ router.get("/stats", verifytokenandAdmin, async (req, res) => {
     const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
   
     try {
-      const data = await User.aggregate([
+      const data = await user.aggregate([
         { $match: { createdAt: { $gte: lastYear } } },
         {
           $project: {

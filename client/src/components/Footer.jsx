@@ -9,6 +9,7 @@ import {
   } from "@mui/icons-material";
   import styled from "styled-components";
   import { mobile } from "../responsive";
+import { Link } from "react-router-dom";
   
   const Container = styled.div`
     display: flex;
@@ -112,8 +113,8 @@ import {
         <Center>
           <Title>Useful Links</Title>
           <List>
-            <ListItem>Home</ListItem>
-            <ListItem>Cart</ListItem>
+            <ListItem><Link to='/'>Home</Link></ListItem>
+            <ListItem><Link to='/cart'>Cart</Link></ListItem>
             <ListItem>Man Fashion</ListItem>
             <ListItem>Woman Fashion</ListItem>
             <ListItem>Accessories</ListItem>

@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useState } from "react";
+import { register } from "../redux/apiCalls";
+import {useNavigate} from 'react-router-dom';
 
 const Container = styled.div`
   width: 100vw;
@@ -31,6 +34,7 @@ const Title = styled.h1`
 const Form = styled.form`
   display: flex;
   flex-wrap: wrap;
+  flex-direction:column;
 `;
 
 const Input = styled.input`
@@ -55,22 +59,44 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+
+  const [username , setUsername] = useState("");
+  const [email , setEmail] = useState("");
+  const [password , setPassword] = useState("");
+  const [confirmPassword , setconfirmPassword] = useState("");
+  const [showerr , setShowerr] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = (e)=>{
+    e.preventDefault();
+    if(password === confirmPassword){
+      register({username , email , password});
+      navigate('/login');
+    }else{
+      setShowerr(true);
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setconfirmPassword("");
+    }
+  }
+
+
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+          <Input value={username} placeholder="username" onChange={(e)=>setUsername(e.target.value)} required/>
+          <Input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="email"  required/>
+          <Input type="password" value={password} onChange={(e)=>setPassword(e.target.value)}  placeholder="password"  required/>
+          <Input type="password" value={confirmPassword} onChange={(e)=>setconfirmPassword(e.target.value)} placeholder="confirm password" required/>
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          {showerr && <Agreement style={{ color: 'red' , marginTop:'5px' }}>Password doesn't match with confirm password</Agreement>}
+          <Button onClick = {handleRegister}>CREATE</Button>
         </Form>
       </Wrapper>
     </Container>

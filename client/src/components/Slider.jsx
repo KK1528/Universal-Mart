@@ -54,7 +54,10 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
-  height: 80%;
+  height: auto;
+  width:100%;
+  justify-item:center;
+  align-item:center;
 `;
 
 const InfoContainer = styled.div`
