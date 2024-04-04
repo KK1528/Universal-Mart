@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {mobile} from "../responsive";
-import { useDispatch} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import {useState} from 'react';
 import {login} from '../redux/apiCalls'
 import { Link } from "react-router-dom";
@@ -65,15 +65,16 @@ const Login = () => {
 
   const [username , setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-
+    const dispatch = useDispatch();
+ const [showerror, setShowerror]=useState(false);
 
   const handleClick = async (e) => {
     e.preventDefault();
     try {
       await login(dispatch, { username, password });
     } catch (err) {
-      console.error("Login failed:", err);
+      console.error("Login failed:001 => ", err);
+      setShowerror(true)
     }
   }
 
@@ -86,6 +87,8 @@ const Login = () => {
           <Input placeholder="username" onChange = {(e)=>setUsername(e.target.value)}/>
           <Input placeholder="password" onChange = {(e)=>setPassword(e.target.value)}/>
           <Button onClick={handleClick}>LOGIN</Button>
+          {showerror && <div style={{ color: 'red' , marginTop:'5px' }}>Password doesn't match with confirm password</div>}
+
           <Linkstyle>DO NOT YOU REMEMBER THE PASSWORD?</Linkstyle>
           <Linkstyle><Link to='/register'>CREATE A NEW ACCOUNT</Link></Linkstyle>
         </Form>

@@ -7,8 +7,9 @@ export const login = async (dispatch, user) => {
         const res = await publicRequest.post("/auth/login", user);
         dispatch(loginSuccess(res.data));
     } catch (err) {
-        console.log(err);
+        console.log("login err=> ", err);
         dispatch(loginError());
+        throw new Error("Wrong credentials!");
     }
 };
 
