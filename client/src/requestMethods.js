@@ -2,15 +2,25 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8000/api/";
 
-const user = JSON.parse(localStorage.getItem("persist:user"))?.user;
-const currentUser = user && JSON.parse(user).currentUser;
-const TOKEN = currentUser?.accessToken;
+// Access persisted data from localStorage
+const persistedData = localStorage.getItem("persist:root");
+let TOKEN = null;
+if (persistedData) {
+  try {
+    const parsedData = JSON.parse(persistedData);
+    const user = JSON.parse(parsedData.user);
+    TOKEN = user.currentUser.accessToken;
+  } catch (error) {
+    console.error("Error parsing persisted data:", error);
+  }
+}
 
+// Create axios instances
 export const publicRequest = axios.create({
   baseURL: BASE_URL,
 });
 
 export const userRequest = axios.create({
   baseURL: BASE_URL,
-  header: { token: `Bearer ${TOKEN}` },
+  headers: { token: `Bearer ${TOKEN}` }, // Use TOKEN if available
 });

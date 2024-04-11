@@ -11,7 +11,7 @@ import Register from "./Pages/Register";
 const App = () => {
 
   const user = useSelector(state=>state.user.currentUser);
-  
+  const isAdmin = useSelector(state=>state.user.currentUser?.isAdmin);
   return (
     <Router>
       <Routes>
