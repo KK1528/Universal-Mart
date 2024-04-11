@@ -21,6 +21,7 @@ const App = () => {
         <Route path="/cart" element={ user ? <Cart/> : <Navigate to="/login"/> } />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/"/> : <Register />} />
+        
       </Routes>
     </Router>
   );
