@@ -130,7 +130,6 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
-  const navigate = useNavigate();
 
   return (
     <Container>

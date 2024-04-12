@@ -2,7 +2,7 @@ import { Send } from '@mui/icons-material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { mobile } from "../responsive";
-import axios from 'axios';
+import { publicRequest } from '../requestMethods';
 
 const Container = styled.div`
   height: 60vh;
@@ -52,10 +52,11 @@ const Newsletter = () => {
 
   const sendEmail = async () => {
     try {
-      await axios.post("http://localhost:8000/api/sendemail", { email }); // Make request to backend API
+      await publicRequest.post("/sendemail", { email }); 
       alert("Email sent successfully!");
+      setEmail("");
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Error sending email frontend:", error);
       alert("Failed to send email.");
     }
   };
