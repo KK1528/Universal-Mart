@@ -24,8 +24,7 @@ router.post('/', async (req, res) => {
       text: 'You have successfully subscribed to our newsletter.'
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ' + info.response);
+    await transporter.sendMail(mailOptions);
     res.send('Email sent successfully');
   } catch (error) {
     console.error("Error sending email backend:", error);
