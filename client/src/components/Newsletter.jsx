@@ -1,7 +1,8 @@
-import { Send } from '@mui/icons-material'
-import React from 'react'
-import styled from 'styled-components'
+import { Send } from '@mui/icons-material';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import { mobile } from "../responsive";
+import axios from 'axios';
 
 const Container = styled.div`
   height: 60vh;
@@ -21,7 +22,6 @@ const Desc = styled.div`
   font-weight: 300;
   margin-bottom: 20px;
   ${mobile({ textAlign: "center" })}
-
 `;
 
 const InputContainer = styled.div`
@@ -47,20 +47,31 @@ const Button = styled.button`
   color: white;
 `;
 
-
 const Newsletter = () => {
+  const [email, setEmail] = useState("");
+
+  const sendEmail = async () => {
+    try {
+      await axios.post("http://localhost:8000/api/sendemail", { email }); // Make request to backend API
+      alert("Email sent successfully!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email.");
+    }
+  };
+
   return (
     <Container>
       <Title>Newsletter</Title>
       <Desc>GET TIMELY UPDATE OF LATEST ARRIVALS FROM YOUR FAVOURITE PLACE !!</Desc>
       <InputContainer>
-        <Input placeholder='Your Email address'/>
-        <Button>
-            <Send/>
+        <Input placeholder='Your Email address' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Button onClick={sendEmail}>
+          <Send />
         </Button>
       </InputContainer>
     </Container>
-  )
-}
+  );
+};
 
-export default Newsletter
+export default Newsletter;

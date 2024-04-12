@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {mobile} from "../responsive";
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {useState} from 'react';
 import {login} from '../redux/apiCalls'
 import { Link } from "react-router-dom";
@@ -87,7 +87,7 @@ const Login = () => {
           <Input placeholder="username" onChange = {(e)=>setUsername(e.target.value)}/>
           <Input placeholder="password" onChange = {(e)=>setPassword(e.target.value)}/>
           <Button onClick={handleClick}>LOGIN</Button>
-          {showerror && <div style={{ color: 'red' , marginTop:'5px' }}>Password doesn't match with confirm password</div>}
+          {showerror && <div style={{ color: 'red' , marginTop:'5px' }}>Wrong Credentials</div>}
 
           <Linkstyle>DO NOT YOU REMEMBER THE PASSWORD?</Linkstyle>
           <Linkstyle><Link to='/register'>CREATE A NEW ACCOUNT</Link></Linkstyle>

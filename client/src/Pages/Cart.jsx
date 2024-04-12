@@ -150,7 +150,7 @@ const Cart = () => {
           <Info>
             {cart.products.map((product) => {
               return (
-                <Product key= {product._id}>
+                <Product key = {product.id}>
                   <ProductDetail>
                     <Image src={product.img} />
                     <Details>

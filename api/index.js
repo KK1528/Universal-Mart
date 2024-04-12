@@ -7,6 +7,7 @@ const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
+const emailRoute = require("./routes/sendEmail");
 const cors = require("cors")
 
 dotenv.config();
@@ -23,6 +24,7 @@ mongoose
     app.use("/api/products", productRoute);
     app.use("/api/carts", cartRoute);
     app.use("/api/orders", orderRoute);
+    app.use("/api/sendemail" , emailRoute);
     
 const port = process.env.PORT || 8000; 
 app.listen(port, () => {

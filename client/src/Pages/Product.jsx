@@ -9,7 +9,7 @@ import { useLocation } from "react-router";
 import { useState ,useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { publicRequest } from "../requestMethods";
-import { addProduct } from "../redux/cartRedux";
+import { addProductToCart } from "../redux/cartRedux";
 
 const Container = styled.div``;
 
@@ -149,7 +149,7 @@ const Product = () => {
   }
 
   const handleClick = () => {
-    dispatch(addProduct({...product , quantity , color , size}));
+    dispatch(addProductToCart({...product , quantity , color , size}));
   }
 
   return (

@@ -28,7 +28,6 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    console.log("req.body", req.body);
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
       throw new Error("Wrong credentials!"); // Throw error if user is not found

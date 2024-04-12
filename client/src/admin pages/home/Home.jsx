@@ -1,10 +1,10 @@
-import Chart from "../../components/chart/Chart";
-import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
+import Chart from "../../adminComponent/chart/Chart";
+import FeaturedInfo from "../../adminComponent/featuredInfo/FeaturedInfo";
 import "./home.css";
-import WidgetSm from "../../components/widgetSm/WidgetSm";
-import WidgetLg from "../../components/widgetLg/WidgetLg";
+import WidgetSm from "../../adminComponents/widgetSm/WidgetSm";
+import WidgetLg from "../../adminComponent/widgetLg/WidgetLg";
 import { useEffect, useMemo, useState } from "react";
-import { userRequest } from "../../RequestMethods";
+import { userRequest } from "../../requestMethods";
 
 export default function Home() {
   const [userStats, setUserStats] = useState([]);
