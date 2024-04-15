@@ -11,6 +11,7 @@ import { publicRequest } from "../requestMethods";
 import { useDispatch, useSelector } from "react-redux";
 // import { updateCartProduct } from "../redux/apiCalls";
 import {  updateCart } from "../redux/cartRedux";
+import { useNavigate } from "react-router-dom";
 
 
 const Container = styled.div``;
@@ -128,8 +129,8 @@ const Product = () => {
   const id = location.pathname.split('/')[2].substring(1);
   const [product , setProducts] = useState({});
   const [quant, setQuantity] = useState(1);
-  const Cart = useSelector(state=>state.cart);
-
+  const user = useSelector(state=>state.user.currentUser);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getProduct = async () => {
@@ -155,8 +156,9 @@ const Product = () => {
   }
   
   const handleAddToCart = () => {
-    console.log("this is the object i am pushing in redux",{...product,quantity:quant});
-    dispatch(updateCart({...product , quantity:quant}));
+    // console.log("this is the object i am pushing in redux",{...product,quantity:quant});
+     if(user !== null) dispatch(updateCart({...product , quantity:quant}));
+     else navigate('/login');
     // console.log("this is the cart", Cart.products);
   };
 

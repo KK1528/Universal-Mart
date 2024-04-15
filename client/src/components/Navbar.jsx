@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Badge from "@mui/material/Badge";
 import styled from "styled-components";
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 import { Search } from "@mui/icons-material";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -77,20 +77,16 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-  const user = useSelector(state=>state.user.currentUser);
+  const user = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.cart.totalQuantity);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     getCart(user._id, dispatch);
-  //   }
-  // }, [user, dispatch]);
-
-  const handleLogout = () =>{
-    dispatch(setCart({products: [], totalQuantity : 0, total: 0}));
-    dispatch(logout());
-  }
+  const handleLogout = () => {
+    if (user !== null) {
+      dispatch(setCart({ products: [], totalQuantity: 0, total: 0 }));
+      dispatch(logout());
+    }
+  };
 
   return (
     <Container>
@@ -103,16 +99,18 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Link to='/' style={{textDecoration:'none'}}><Logo>KK</Logo></Link>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Logo>KK</Logo>
+          </Link>
         </Center>
         <Right>
           {!user && (
-            <Link to="/Register" style={{textDecoration:'none'}}>
+            <Link to="/Register" style={{ textDecoration: "none" }}>
               <MenuItem>REGISTER</MenuItem>
             </Link>
           )}
           {!user && (
-            <Link to="/Login" style={{textDecoration:'none'}}>
+            <Link to="/Login" style={{ textDecoration: "none" }}>
               <MenuItem>SIGN IN</MenuItem>
             </Link>
           )}
@@ -126,7 +124,11 @@ const Navbar = () => {
               </Badge>
             </MenuItem>
           )}
-          {user && <MenuItem onClick={handleLogout}><LogoutIcon/></MenuItem>}
+          {user && (
+            <MenuItem onClick={handleLogout}>
+              <LogoutIcon />
+            </MenuItem>
+          )}
         </Right>
       </Wrapper>
     </Container>

@@ -2,7 +2,7 @@ import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../redux/cartRedux";
 
 const Info = styled.div`
@@ -67,11 +67,16 @@ const Icon = styled.div`
 `;
 
 const Product = ({ item }) => {
+  const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleCart = (product) => {
-    dispatch(addProduct(product));
-    navigate("/cart");
+    if (user !== null) {
+      dispatch(addProduct(product));
+      navigate("/cart");
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -79,7 +84,7 @@ const Product = ({ item }) => {
       <Circle />
       <Image src={item.img} />
       <Info>
-        <Icon onClick={()=>handleCart(item)}>
+        <Icon onClick={() => handleCart(item)}>
           <ShoppingCartOutlined />
         </Icon>
         <Icon>
