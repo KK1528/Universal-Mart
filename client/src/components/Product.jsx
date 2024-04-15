@@ -1,10 +1,9 @@
-import {
-  SearchOutlined,
-  ShoppingCartOutlined,
-} from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../redux/cartRedux";
 
 const Info = styled.div`
   opacity: 0;
@@ -68,15 +67,20 @@ const Icon = styled.div`
 `;
 
 const Product = ({ item }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleCart = (product) => {
+    dispatch(addProduct(product));
+    navigate("/cart");
+  };
+
   return (
     <Container>
       <Circle />
       <Image src={item.img} />
       <Info>
-        <Icon>
-          <Link to="/Cart">
-            <ShoppingCartOutlined />
-          </Link>
+        <Icon onClick={()=>handleCart(item)}>
+          <ShoppingCartOutlined />
         </Icon>
         <Icon>
           <Link to={`/product/:${item._id}`}>

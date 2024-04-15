@@ -8,7 +8,7 @@ import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userRedux";
-import {getCart} from '../redux/apiCalls';
+import { setCart } from "../redux/cartRedux";
 
 const Container = styled.div`
   height: 60px;
@@ -88,6 +88,7 @@ const Navbar = () => {
   // }, [user, dispatch]);
 
   const handleLogout = () =>{
+    dispatch(setCart({products: [], totalQuantity : 0, total: 0}));
     dispatch(logout());
   }
 

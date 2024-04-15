@@ -4,7 +4,8 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCart,removeProduct } from "../redux/cartRedux";
 // import { useNavigate } from "react-router-dom";
 
 const Container = styled.div``;
@@ -129,9 +130,26 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  console.log(cart);
 
-  // console.log(cart);
+  
+  const handleIncrement = (product) => {
+    const updatedProduct = { ...product, quantity: product.quantity + 1 }; // Increment quantity
+    dispatch(updateCart(updatedProduct)); // Dispatch action with updated product
+  };
+
+  const handleDecrement = (product) => {
+    if (product.quantity === 1) {
+      dispatch(removeProduct(product._id));
+    } else {
+      const updatedProduct = { ...product, quantity: product.quantity - 1 };
+      dispatch(updateCart(updatedProduct));
+    }
+  };
+  
+
 
   return (
     <Container>
@@ -151,7 +169,7 @@ const Cart = () => {
           <Info>
             {cart.products.map((product) => {
               return (
-                <Product key = {product.id}>
+                <Product key={product._id}>
                   <ProductDetail>
                     <Image src={product.img} />
                     <Details>
@@ -159,7 +177,7 @@ const Cart = () => {
                         <b>Product:</b> {product.title}
                       </ProductName>
                       <ProductId>
-                        <b>ID:</b> {product.id}
+                        <b>ID:</b> {product._id}
                       </ProductId>
                       <ProductColor color="black" />
                       <ProductSize>
@@ -169,9 +187,9 @@ const Cart = () => {
                   </ProductDetail>
                   <PriceDetail>
                     <ProductAmountContainer>
-                      <Add />
+                      <Remove onClick={() => handleDecrement(product)} />
                       <ProductAmount>{product.quantity}</ProductAmount>
-                      <Remove />
+                      <Add onClick={() => handleIncrement(product)} />
                     </ProductAmountContainer>
                     <ProductPrice>$ {product.price}</ProductPrice>
                   </PriceDetail>
@@ -184,7 +202,7 @@ const Cart = () => {
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total.toFixed(2)}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -196,7 +214,7 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total.toFixed(2)}</SummaryItemPrice>
             </SummaryItem>
             <Button>CHECKOUT NOW</Button>
           </Summary>
