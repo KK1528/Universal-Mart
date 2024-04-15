@@ -14,7 +14,7 @@ import {
   addProductStart,
   addProductSuccess,
 } from "./productRedux";
-import { addProductToCart, removeProductFromCart, updateProductQuantity, setCart } from './cartRedux';
+import { setCart } from './cartRedux';
 
 // FOR THE CLIENT 
 
@@ -95,9 +95,10 @@ export const getCart = async (userId, dispatch) => {
 //   }
 // };
 
-export const updateCartProduct = async (userId, updatedProductCart) => {
+export const backendCartUpdate = async (userId, cart) => {
   try {
-    await userRequest.put("/cart/" + userId , updatedProductCart);
+    console.log("/cart/" + userId , cart);
+    await userRequest.put("/cart/" + userId , cart);
   } catch (err) {
     console.error("Error updating product in cart: this error is transmitted through the apicall code", err);
   }

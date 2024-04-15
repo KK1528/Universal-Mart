@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import Announcement from "../components/Announcement";
-import Products from "../components/Products";
+import Product from "../components/Product";
 import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
 import { mobile } from "../responsive";
-import { useLocation } from "react-router";
+
+
+const ContainerProduct = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
 
 const Container = styled.div``;
 
@@ -48,11 +56,41 @@ const Select = styled.select`
 `;
 const Option = styled.option``;
 
-const ProductList = () => {
-  const location = useLocation();
-  const cat = location.pathname.split("/")[2];
+const AllProducts = () => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState("newest");
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/products/");
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+    getProducts();
+  },[]);
+
+  useEffect(() => {
+    const applyFilters = () => {
+      if (!filters || Object.keys(filters).length === 0) {
+        // If no filters applied, set filtered products to all products
+        setFilteredProducts(products);
+      } else {
+        // Apply filters
+        const filtered = products.filter((item) =>
+          Object.entries(filters).every(([key, value]) =>
+            item[key].includes(value)
+          )
+        );
+        setFilteredProducts(filtered);
+      }
+    };
+    applyFilters();
+  }, [products, filters]);
 
   const handleFilters = (e) => {
     const value = e.target.value;
@@ -66,11 +104,32 @@ const ProductList = () => {
     setFilters({});
   };
 
+  useEffect(() => {
+    const sortProducts = () => {
+      if (sort === "newest") {
+        setFilteredProducts((prev) =>
+          [...prev].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          )
+        );
+      } else if (sort === "asc") {
+        setFilteredProducts((prev) =>
+          [...prev].sort((a, b) => a.prices - b.prices)
+        );
+      } else {
+        setFilteredProducts((prev) =>
+          [...prev].sort((a, b) => b.prices - a.prices)
+        );
+      }
+    };
+    sortProducts();
+  }, [sort]);
+
   return (
     <Container>
       <Navbar />
       <Announcement />
-      <Title>{cat}</Title>
+      <Title>All Products</Title>
       <FilterContainer>
         <Filter>
           <FilterText>Filter Products:</FilterText>
@@ -101,14 +160,20 @@ const ProductList = () => {
           </Select>
         </Filter>
         <Filter>
-          <FilterTextReset onClick={handleResetFilters}>Reset Filters</FilterTextReset>
+          <FilterTextReset onClick={handleResetFilters}>
+            Reset Filters
+          </FilterTextReset>
         </Filter>
       </FilterContainer>
-      <Products cat={cat} filters={filters} sort={sort} />
+      <ContainerProduct>
+        {filteredProducts.map((item) => (
+          <Product item={item} key={item._id} />
+        ))}
+      </ContainerProduct>
       <Newsletter />
       <Footer />
     </Container>
   );
 };
 
-export default ProductList;
+export default AllProducts;

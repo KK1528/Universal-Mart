@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { updateCartProduct } from "../redux/apiCalls";
 import {  updateCart } from "../redux/cartRedux";
 import { useNavigate } from "react-router-dom";
+import { backendCartUpdate } from "../redux/apiCalls";
 
 
 const Container = styled.div``;
@@ -131,6 +132,7 @@ const Product = () => {
   const [quant, setQuantity] = useState(1);
   const user = useSelector(state=>state.user.currentUser);
   const navigate = useNavigate();
+  const cart = useSelector(state=>state.cart); 
 
   useEffect(() => {
     const getProduct = async () => {
@@ -155,9 +157,26 @@ const Product = () => {
     }
   }
   
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     // console.log("this is the object i am pushing in redux",{...product,quantity:quant});
-     if(user !== null) dispatch(updateCart({...product , quantity:quant}));
+     if(user !== null) {
+      dispatch(updateCart({...product , quantity:quant}));
+      // Prepare the updated cart object to send to the backend
+    const updatedCart = {
+      userId: user._id,
+      products: [
+        ...cart.products, // Keep the existing products
+        { ...product, quantity: quant } // Add the new product with updated quantity
+      ]
+    };
+    console.log(
+      updatedCart
+    )
+
+    // Update the cart on the backend
+    await backendCartUpdate(user._id, updatedCart);
+      console.log("cart is updated succesfully" , )
+     }
      else navigate('/login');
     // console.log("this is the cart", Cart.products);
   };

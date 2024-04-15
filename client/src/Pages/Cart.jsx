@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCart,removeProduct } from "../redux/cartRedux";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 const Container = styled.div``;
@@ -132,8 +133,6 @@ const Button = styled.button`
 const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  console.log(cart);
-
   
   const handleIncrement = (product) => {
     const updatedProduct = { ...product, quantity: product.quantity + 1 }; // Increment quantity
@@ -158,10 +157,9 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton><Link to='/'>CONTINUE SHOPPING</Link></TopButton>
           <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist (0)</TopText>
+            <TopText>Shopping Bag({cart.totalQuantity})</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>

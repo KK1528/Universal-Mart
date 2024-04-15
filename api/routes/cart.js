@@ -37,34 +37,35 @@ router.get("/find/:id", verifytokenandAuthorization, async (req, res) => {
 
 
 //UPDATE
-router.put("/:id", verifytokenandAuthorization, async (req, res) => {
+router.put("/:userId", verifytokenandAuthorization, async (req, res) => {
   try {
-    // Check if the cart item exists
-    const cartItem = await Cart.findById(req.params.id);
+    // Check if the cart exists for the user
+    const cart = await Cart.findOne({ userId: req.params.userId });
 
-    if (!cartItem) {
-      return res.status(404).json({ message: "Cart not found contact admin" });
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found for this user" });
     }
 
-    // Update the cart item
-    const updatedCart = await Cart.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
+    // Update the cart
+    const updatedCart = await Cart.findOneAndUpdate(
+      { user: req.params.userId },
+      { $set: req.body },
       { new: true }
     );
+    
     // Check if the update operation was successful
     if (!updatedCart) {
-      return res.status(500).json({ message: "Failed to update cart item" });
+      return res.status(500).json({ message: "Failed to update cart" });
     }
-    // If successful, return the updated cart item
+
+    // If successful, return the updated cart
     res.status(200).json(updatedCart);
   } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 
 //DELETE

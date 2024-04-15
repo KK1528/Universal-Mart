@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar.jsx";
 import Announcement from "../components/Announcement.jsx";
 import Slider from "../components/Slider.jsx";
 import Categories from "../components/categories.jsx";
-import Products from "../components/Products.jsx";
+import SliderProducts from "../components/SliderProducts.jsx";
 import Nwesletter from "../components/Newsletter.jsx";
 import Footer from "../components/Footer.jsx";
 
@@ -14,7 +14,7 @@ export default function Home() {
       <Announcement />
       <Slider />
       <Categories />
-      <Products />
+      <SliderProducts />
       <Nwesletter />
       <Footer />
     </div>
