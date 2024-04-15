@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Badge from "@mui/material/Badge";
 import styled from "styled-components";
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
@@ -8,6 +8,7 @@ import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userRedux";
+import {getCart} from '../redux/apiCalls';
 
 const Container = styled.div`
   height: 60px;
@@ -79,6 +80,12 @@ const Navbar = () => {
   const user = useSelector(state=>state.user.currentUser);
   const quantity = useSelector((state) => state.cart.quantity);
   const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (user) {
+  //     getCart(user._id, dispatch);
+  //   }
+  // }, [user, dispatch]);
 
   const handleLogout = () =>{
     dispatch(logout());

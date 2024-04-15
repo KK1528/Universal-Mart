@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import {mobile} from "../responsive";
-import { useDispatch} from 'react-redux';
-import {useState} from 'react';
-import {login} from '../redux/apiCalls'
+import { mobile } from "../responsive";
+import { useDispatch} from "react-redux";
+import { useState } from "react";
+import { createCart, getCart, login } from "../redux/apiCalls";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
@@ -54,7 +54,7 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 
-const Linkstyle = styled.a`
+const Linkstyle = styled.span`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
@@ -62,35 +62,47 @@ const Linkstyle = styled.a`
 `;
 
 const Login = () => {
-
-  const [username , setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-    const dispatch = useDispatch();
- const [showerror, setShowerror]=useState(false);
-
+  const dispatch = useDispatch();
+  const [showerror, setShowerror] = useState(false);
+  
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await login(dispatch, { username, password });
+      const res = await login(dispatch, { username, password });
+      await getCart(res._id,dispatch);
+      // console.log(res);
     } catch (err) {
       console.error("Login failed:001 => ", err);
-      setShowerror(true)
+      setShowerror(true);
     }
-  }
-
+  };
 
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-          <Input placeholder="username" onChange = {(e)=>setUsername(e.target.value)}/>
-          <Input placeholder="password" onChange = {(e)=>setPassword(e.target.value)}/>
+          <Input
+            placeholder="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            placeholder="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <Button onClick={handleClick}>LOGIN</Button>
-          {showerror && <div style={{ color: 'red' , marginTop:'5px' }}>Wrong Credentials</div>}
+          {showerror && (
+            <div style={{ color: "red", marginTop: "5px" }}>
+              Wrong Credentials
+            </div>
+          )}
 
           <Linkstyle>DO NOT YOU REMEMBER THE PASSWORD?</Linkstyle>
-          <Linkstyle><Link to='/register'>CREATE A NEW ACCOUNT</Link></Linkstyle>
+          <Linkstyle>
+            <Link to="/register">CREATE A NEW ACCOUNT</Link>
+          </Linkstyle>
         </Form>
       </Wrapper>
     </Container>

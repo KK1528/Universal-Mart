@@ -4,17 +4,37 @@ const router = require("express").Router();
 
 //CREATE
 
-router.post("/", verifytoken, async (req, res) => {
-  const newCart = new Cart(req.body);
+router.post("/", async (req, res) => {
+  const { userId } = req.body; // Extract userId from the request body
+
+  // Assuming Cart model has a field called userId
+  const newCart = new Cart({ userId });
 
   try {
+    const existingCart = await Cart.findOne({ userId });
+    if (existingCart) {
+      return res.status(200).json({ message: "Cart already exists for this user" });
+    }
     const savedCart = await newCart.save();
     res.status(200).json(savedCart);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+
+//GET USER CART
+router.get("/find/:id", verifytokenandAuthorization, async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ userId : req.params.id });
+    res.status(200).json(cart);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
 });
+
 
 //UPDATE
 router.put("/:id", verifytokenandAuthorization, async (req, res) => {
@@ -43,16 +63,6 @@ router.delete("/:id", verifytokenandAuthorization, async (req, res) => {
   }
 });
 
-//GET USER CART
-router.get("/find/:userId", verifytokenandAuthorization, async (req, res) => {
-  try {
-    const cart = await Cart.findOne({ userId: req.params.userId });
-    res.status(200).json(cart);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
 
 // //GET ALL
 

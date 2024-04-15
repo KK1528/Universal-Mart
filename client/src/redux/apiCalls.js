@@ -17,16 +17,17 @@ import {
 
 import { addProductToCart, removeProductFromCart, updateProductQuantity, setCart } from './cartRedux';
 
-
 // FOR THE CLIENT 
 
 
 // Authentication
+
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
     const res = await publicRequest.post("/auth/login", user);
     dispatch(loginSuccess(res.data));
+    return res.data;
   } catch (err) {
     console.log("login err=> ", err);
     dispatch(loginError());
@@ -36,7 +37,8 @@ export const login = async (dispatch, user) => {
 
 export const register = async (user) => {
   try {
-    await publicRequest.post("/auth/register", user);
+    const userdata = await publicRequest.post("/auth/register", user);
+    return userdata.data;
   } catch (err) {
     console.error(err);
     throw err;
@@ -44,7 +46,7 @@ export const register = async (user) => {
 }
 
 export const logout = async (dispatch) => {
-  dispatch(logout); 
+  dispatch(logout);
 };
 
 
@@ -61,6 +63,28 @@ export const getProducts = async (dispatch) => {
 
 
 //CRUD on CART 
+
+export const createCart = async (userId) => {
+  try {
+    await userRequest.post("/carts",  {userId} );
+    console.log("create cart succesfully create wala hai");
+  } catch (err) {
+    console.error("Error Creating the cart:", err);
+  }
+}
+
+
+export const getCart = async (userId, dispatch) => {
+  try {
+    const res = await userRequest.get("/carts/find/" + userId);
+    dispatch(setCart(res.data));
+    console.log("this is the cart of the user : " + userId + " => " + res.data);
+  } catch (err) {
+    console.error("Error getting user's cart :", err);
+  }
+};
+
+/*****************THE ABOVE CALLS ARE VERIFIED AND ADDED*****************************/
 
 export const addToCart = async (userId, product, dispatch) => {
   try {
@@ -89,15 +113,7 @@ export const removeFromCart = async (cartItemId, dispatch) => {
   }
 };
 
-export const getCart = async (userId, dispatch) => {
-  try {
-    const res = await userRequest.get(`/cart/find/${userId}`);
-    // Assuming the response contains the cart data
-    dispatch(setCart(res.data)); // You need to define the appropriate action in cartRedux.js
-  } catch (err) {
-    console.error("Error getting user's cart:", err);
-  }
-};
+
 
 
 
@@ -149,3 +165,4 @@ export const addProduct = async (product, dispatch) => {
     dispatch(addProductFailure());
   }
 };
+

@@ -9,7 +9,9 @@ if (persistedData) {
   try {
     const parsedData = JSON.parse(persistedData);
     const user = JSON.parse(parsedData.user);
-    TOKEN = user.currentUser.accessToken;
+    if (user && user.currentUser && user.currentUser.accessToken) {
+      TOKEN = user.currentUser.accessToken;
+    }
   } catch (error) {
     console.error("Error parsing persisted data:", error);
   }
@@ -23,5 +25,5 @@ export const publicRequest = axios.create({
 
 export const userRequest = axios.create({
   baseURL: BASE_URL,
-  headers: { token: `Bearer ${TOKEN}` }, // Use TOKEN if available
+  headers: { token: `Bearer ${TOKEN}` },
 });

@@ -1,5 +1,4 @@
 import {
-  FavoriteBorderOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
@@ -20,7 +19,6 @@ const Info = styled.div`
   align-items: center;
   justify-content: center;
   transition: all 0.5s ease;
-  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -62,6 +60,7 @@ const Icon = styled.div`
   justify-content: center;
   margin: 10px;
   transition: all 0.5s ease;
+  cursor: pointer;
   &:hover {
     background-color: #e9f5f5;
     transform: scale(1.1);

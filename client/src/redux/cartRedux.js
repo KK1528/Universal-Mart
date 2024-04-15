@@ -84,7 +84,6 @@ const cartSlice = createSlice({
             }
         },
         // Action to clear the cart
-        
         setCart: (state, action) => {
             const { products, quantity, total } = action.payload;
             state.products = products;

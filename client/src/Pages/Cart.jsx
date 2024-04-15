@@ -131,6 +131,8 @@ const Button = styled.button`
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
 
+  
+
   return (
     <Container>
       <Navbar />
@@ -149,7 +151,7 @@ const Cart = () => {
           <Info>
             {cart.products.map((product) => {
               return (
-                <Product key = {product.id}>
+                <Product key = {product.productId}>
                   <ProductDetail>
                     <Image src={product.img} />
                     <Details>
@@ -161,7 +163,7 @@ const Cart = () => {
                       </ProductId>
                       <ProductColor color="black" />
                       <ProductSize>
-                        <b>Size:</b> product.size
+                        <b>Size:</b> {product.size}
                       </ProductSize>
                     </Details>
                   </ProductDetail>
