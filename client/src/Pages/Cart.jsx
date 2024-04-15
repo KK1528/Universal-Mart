@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Container = styled.div``;
 
@@ -131,7 +131,7 @@ const Button = styled.button`
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
 
-  
+  // console.log(cart);
 
   return (
     <Container>
@@ -151,7 +151,7 @@ const Cart = () => {
           <Info>
             {cart.products.map((product) => {
               return (
-                <Product key = {product.productId}>
+                <Product key = {product.id}>
                   <ProductDetail>
                     <Image src={product.img} />
                     <Details>

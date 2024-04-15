@@ -39,6 +39,14 @@ router.get("/find/:id", verifytokenandAuthorization, async (req, res) => {
 //UPDATE
 router.put("/:id", verifytokenandAuthorization, async (req, res) => {
   try {
+    // Check if the cart item exists
+    const cartItem = await Cart.findById(req.params.id);
+
+    if (!cartItem) {
+      return res.status(404).json({ message: "Cart not found contact admin" });
+    }
+
+    // Update the cart item
     const updatedCart = await Cart.findByIdAndUpdate(
       req.params.id,
       {
@@ -46,12 +54,18 @@ router.put("/:id", verifytokenandAuthorization, async (req, res) => {
       },
       { new: true }
     );
+    // Check if the update operation was successful
+    if (!updatedCart) {
+      return res.status(500).json({ message: "Failed to update cart item" });
+    }
+    // If successful, return the updated cart item
     res.status(200).json(updatedCart);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
 });
+
 
 //DELETE
 router.delete("/:id", verifytokenandAuthorization, async (req, res) => {

@@ -71,8 +71,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await login(dispatch, { username, password });
-      await getCart(res._id,dispatch);
-      // console.log(res);
+      await getCart(res._id , dispatch);
     } catch (err) {
       console.error("Login failed:001 => ", err);
       setShowerror(true);

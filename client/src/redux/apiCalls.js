@@ -14,7 +14,6 @@ import {
   addProductStart,
   addProductSuccess,
 } from "./productRedux";
-
 import { addProductToCart, removeProductFromCart, updateProductQuantity, setCart } from './cartRedux';
 
 // FOR THE CLIENT 
@@ -77,6 +76,7 @@ export const createCart = async (userId) => {
 export const getCart = async (userId, dispatch) => {
   try {
     const res = await userRequest.get("/carts/find/" + userId);
+    console.log("fecting the cart",res.data);
     dispatch(setCart(res.data));
     console.log("this is the cart of the user : " + userId + " => " + res.data);
   } catch (err) {
@@ -86,32 +86,31 @@ export const getCart = async (userId, dispatch) => {
 
 /*****************THE ABOVE CALLS ARE VERIFIED AND ADDED*****************************/
 
-export const addToCart = async (userId, product, dispatch) => {
+// export const addToCart = async (userId, product, dispatch) => {
+//   try {
+//     const res = await userRequest.post(`/cart`, { userId, product });
+//     dispatch(addProductToCart(res.data));
+//   } catch (err) {
+//     console.error("Error adding product to cart:", err);
+//   }
+// };
+
+export const updateCartProduct = async (userId, updatedProductCart) => {
   try {
-    const res = await userRequest.post(`/cart`, { userId, product });
-    dispatch(addProductToCart(res.data));
+    await userRequest.put("/cart/" + userId , updatedProductCart);
   } catch (err) {
-    console.error("Error adding product to cart:", err);
+    console.error("Error updating product in cart: this error is transmitted through the apicall code", err);
   }
 };
 
-export const updateCartProduct = async (cartItemId, updatedProduct, dispatch) => {
-  try {
-    const res = await userRequest.put(`/cart/${cartItemId}`, updatedProduct);
-    dispatch(updateProductQuantity({ id: cartItemId, quantity: updatedProduct.quantity }));
-  } catch (err) {
-    console.error("Error updating product in cart:", err);
-  }
-};
-
-export const removeFromCart = async (cartItemId, dispatch) => {
-  try {
-    await userRequest.delete(`/cart/${cartItemId}`);
-    dispatch(removeProductFromCart(cartItemId));
-  } catch (err) {
-    console.error("Error removing product from cart:", err);
-  }
-};
+// export const removeFromCart = async (cartItemId, dispatch) => {
+//   try {
+//     await userRequest.delete(`/cart/${cartItemId}`);
+//     dispatch(removeProductFromCart(cartItemId));
+//   } catch (err) {
+//     console.error("Error removing product from cart:", err);
+//   }
+// };
 
 
 

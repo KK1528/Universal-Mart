@@ -8,8 +8,10 @@ import { mobile } from "../responsive";
 import { useLocation } from "react-router";
 import { useState ,useEffect } from "react";
 import { publicRequest } from "../requestMethods";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
+// import { updateCartProduct } from "../redux/apiCalls";
+import {  updateCart } from "../redux/cartRedux";
+
 
 const Container = styled.div``;
 
@@ -125,7 +127,9 @@ const Product = () => {
   const location = useLocation();
   const id = location.pathname.split('/')[2].substring(1);
   const [product , setProducts] = useState({});
-  const [quantity, setQuantity] = useState(1);
+  const [quant, setQuantity] = useState(1);
+  const Cart = useSelector(state=>state.cart);
+
 
   useEffect(() => {
     const getProduct = async () => {
@@ -142,19 +146,19 @@ const Product = () => {
 
   const handleQuantity = (type)=>{
     if(type==='dec'){
-      if(quantity>1){
-        setQuantity(quantity-1);
+      if(quant>1){
+        setQuantity(quant-1);
       }
     }else{
-      setQuantity(quantity+1);
+      setQuantity(quant+1);
     }
   }
-
+  
   const handleAddToCart = () => {
-    console.log(product.id +". -----  ."+{...product, quantity});
-    dispatch(addToCart(product.id, {...product, quantity}));
-  }
-
+    console.log("this is the object i am pushing in redux",{...product,quantity:quant});
+    dispatch(updateCart({...product , quantity:quant}));
+    console.log("this is the cart", Cart.products);
+  };
 
   return (
     <Container>
@@ -173,12 +177,12 @@ const Product = () => {
               <FilterTitle>Color: {product.color}</FilterTitle>
             </Filter>
             <Filter>
-              <FilterTitle>Category: </FilterTitle>
+              {/* <FilterTitle>Category: </FilterTitle>
               <FilterSize>
               {product.categories?.map((c)=>{
                 <FilterColor color={c} key={c}/>
               })}
-              </FilterSize>
+              </FilterSize> */}
             </Filter>
             <Filter>
               <FilterTitle>Size: {product.size}</FilterTitle>
@@ -187,7 +191,7 @@ const Product = () => {
           <AddContainer>
             <AmountContainer>
               <Remove onClick = {()=>handleQuantity("dec")}/>
-              <Amount>1</Amount>
+              <Amount>{quant}</Amount>
               <Add onClick = {()=>handleQuantity("inc")}/>
             </AmountContainer>
             <Button onClick={handleAddToCart}>ADD TO CART</Button>

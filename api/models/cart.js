@@ -5,15 +5,31 @@ const CartSchema = new mongoose.Schema(
     userId: { type: String, required: true },
     products: [
       {
-        productId: {
-          type: String,
+        id:{
+          type:String,
         },
-        quantity: {
-          type: Number,
-          default: 1,
+        img:{
+          type:String,
+        },
+        title:{
+          type:String,
+        },
+        size:{
+          type:String,
+        },
+        color:{
+          type:String,
+        },
+        price:{
+          type:Number,
+        },
+        quantity:{
+          type:Number,
         },
       },
     ],
+    totalQuantity : {type:Number , default:0},
+    totalPrice : {type:Number},
   },
   { timestamps: true }
 );
