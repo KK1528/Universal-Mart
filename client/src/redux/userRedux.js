@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { removeUserFromLocalStorage } from '../localstorage';
 
 const userSlice = createSlice({
     name: 'user',
@@ -13,6 +14,7 @@ const userSlice = createSlice({
         },
         loginSuccess: (state, action) => {
             state.currentUser = action.payload;
+            // save to local storage 
             state.isFetching = false;
         },
         loginError: (state, action) => {
@@ -20,6 +22,7 @@ const userSlice = createSlice({
             state.error = action.payload;
         },
         logout: (state) => {
+            removeUserFromLocalStorage();
             state.currentUser = null;
         },
     },

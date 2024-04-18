@@ -1,17 +1,21 @@
 import axios from "axios";
+import { getUserFromLocalStorage } from "./localstorage";
+// import { Token } from "@mui/icons-material";
 
 const BASE_URL = "http://localhost:8000/api/";
 
 // Access persisted data from localStorage
-const persistedData = localStorage.getItem("persist:root");
+// const persistedData = localStorage.getItem("persist:root");
+const user = getUserFromLocalStorage();
 let TOKEN = null;
-if (persistedData) {
+if (user) {
   try {
-    const parsedData = JSON.parse(persistedData);
-    const user = JSON.parse(parsedData.user);
-    if (user && user.currentUser && user.currentUser.accessToken) {
-      TOKEN = user.currentUser.accessToken;
+    // const parsedData = JSON.parse(persistedData);
+    // const user = JSON.parse(parsedData.user);
+    if (user  && user.accessToken) {
+      TOKEN = user.accessToken;
     }
+    console.log("Token => ",TOKEN)
   } catch (error) {
     console.error("Error parsing persisted data:", error);
   }

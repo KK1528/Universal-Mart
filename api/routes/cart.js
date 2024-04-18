@@ -25,9 +25,13 @@ router.post("/", async (req, res) => {
 
 
 //GET USER CART
-router.get("/find/:id", verifytokenandAuthorization, async (req, res) => {
+router.get("/find/:userId", verifytokenandAuthorization,async (req, res) => {
+  // console.log("here--> ")
+  // console.log(req.user)
   try {
-    const cart = await Cart.findOne({ userId : req.params.id });
+    const cart = await Cart.findOne({ userId : req.params.userId});
+      
+     console.log(cart);
     res.status(200).json(cart);
   } catch (err) {
     console.log(err);
@@ -38,28 +42,36 @@ router.get("/find/:id", verifytokenandAuthorization, async (req, res) => {
 
 //UPDATE
 router.put("/:userId", verifytokenandAuthorization, async (req, res) => {
+  // console.log(' here -> ' ,req.body);
+  const {products,totalPrice, totalQuantity}=req.body
   try {
     // Check if the cart exists for the user
     const cart = await Cart.findOne({ userId: req.params.userId });
-
+    console.log(cart);
     if (!cart) {
       return res.status(404).json({ message: "Cart not found for this user" });
     }
 
-    // Update the cart
-    const updatedCart = await Cart.findOneAndUpdate(
-      { user: req.params.userId },
-      { $set: req.body },
-      { new: true }
-    );
+    console.log("body sibfojbasd" ,products,totalPrice, totalQuantity);
+    cart.products=products;
+    cart.totalQuantity=totalQuantity;
+    cart.totalPrice=totalPrice;
+    await cart.save();
+    // // Update the cart
+    // const updatedCart = await Cart.findOneAndUpdate(
+    //   { user: req.params.userId },
+    //   { $set: req.body },
+    //   { new: true }
+    // );
     
     // Check if the update operation was successful
-    if (!updatedCart) {
-      return res.status(500).json({ message: "Failed to update cart" });
-    }
+    // if (!updatedCart) {
+    //   console.log("/backend error ");
+    //   return res.status(500).json({ message: "Failed to update cart" });
+    // }
 
     // If successful, return the updated cart
-    res.status(200).json(updatedCart);
+    res.status(200).json({msg:"Cart updated succsussfully", cart:cart});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });

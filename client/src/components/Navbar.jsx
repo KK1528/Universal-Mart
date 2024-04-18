@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userRedux";
 import { setCart } from "../redux/cartRedux";
+import { backendCartUpdate } from "../redux/apiCalls";
 
 const Container = styled.div`
   height: 60px;
@@ -78,11 +79,13 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.currentUser);
-  const quantity = useSelector((state) => state.cart.totalQuantity);
+  const cart=useSelector((state)=>state.cart);
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     if (user !== null) {
+
+      await backendCartUpdate(user?._id,cart)
       dispatch(setCart({ products: [], totalQuantity: 0, total: 0 }));
       dispatch(logout());
     }
@@ -117,7 +120,7 @@ const Navbar = () => {
 
           {user && (
             <MenuItem>
-              <Badge badgeContent={quantity} color="primary">
+              <Badge badgeContent={cart.totalQuantity} color="primary">
                 <Link to="/Cart">
                   <ShoppingCartOutlined />
                 </Link>

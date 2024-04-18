@@ -15,6 +15,7 @@ import {
   addProductSuccess,
 } from "./productRedux";
 import { setCart } from './cartRedux';
+import { addUserToLocalStorage } from '../localstorage';
 
 // FOR THE CLIENT 
 
@@ -26,6 +27,7 @@ export const login = async (dispatch, user) => {
   try {
     const res = await publicRequest.post("/auth/login", user);
     dispatch(loginSuccess(res.data));
+    addUserToLocalStorage(res.data)
     return res.data;
   } catch (err) {
     console.log("login err=> ", err);
@@ -44,9 +46,9 @@ export const register = async (user) => {
   }
 }
 
-export const logout = async (dispatch) => {
-  dispatch(logout);
-};
+// export const logout = async (dispatch) => {
+//   dispatch(logout);
+// };
 
 
 
@@ -97,8 +99,8 @@ export const getCart = async (userId, dispatch) => {
 
 export const backendCartUpdate = async (userId, cart) => {
   try {
-    console.log("/cart/" + userId , cart);
-    await userRequest.put("/cart/" + userId , cart);
+    console.log("/carts/" + userId , cart);
+    await userRequest.put("/carts/" + userId , cart);
   } catch (err) {
     console.error("Error updating product in cart: this error is transmitted through the apicall code", err);
   }

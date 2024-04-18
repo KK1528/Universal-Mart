@@ -9,9 +9,11 @@ const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const emailRoute = require("./routes/sendEmail");
 const cors = require("cors")
+const morgan = require('morgan');
+
 
 dotenv.config();
-
+app.use(morgan("tiny"));
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => console.log("DB Connection Successfull!"))

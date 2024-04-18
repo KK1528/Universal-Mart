@@ -26,7 +26,7 @@ const cartSlice = createSlice({
     initialState: {
         products: [], // Array to store the products in the cart
         totalQuantity : 0,
-        total: 0,    // Total cost of items in the cart
+        totalPrice: 0,    // Total cost of items in the cart
     },
 
     reducers: {
@@ -51,7 +51,7 @@ const cartSlice = createSlice({
                 // Add new product if it doesn't exist in the cart
                 state.products.push(updatedProduct);
                 state.totalQuantity += updatedProduct.quantity;
-                state.total += updatedProduct.price * updatedProduct.quantity;
+                state.totalPrice += updatedProduct.price * updatedProduct.quantity;
             }
         },        
 
@@ -62,7 +62,7 @@ const cartSlice = createSlice({
               const removedProduct = state.products[index];
               state.products.splice(index, 1);
               state.totalQuantity -= removedProduct.quantity;
-              state.total -= removedProduct.price * removedProduct.quantity;
+              state.totalPrice -= removedProduct.price * removedProduct.quantity;
             }
           },
 
@@ -74,13 +74,14 @@ const cartSlice = createSlice({
               // If the product doesn't exist in the cart, add it with default quantity 1
               state.products.push({ ...newProduct, quantity: 1 });
               state.totalQuantity += 1;
-              state.total += newProduct.price;
+              state.totalPrice += newProduct.price;
             }
           },
 
         // Action to clear the cart
         setCart: (state, action) => {
             const res = action.payload;
+            console.log("kejsgfhiuadsh" ,res);
             state.products = res.products;
             state.quantity = res.totalQuantity;
             state.totalPrice = res.totalPrice;

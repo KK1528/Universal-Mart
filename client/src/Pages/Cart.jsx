@@ -133,7 +133,7 @@ const Button = styled.button`
 const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  
+  console.log(cart);
   const handleIncrement = (product) => {
     const updatedProduct = { ...product, quantity: product.quantity + 1 }; // Increment quantity
     dispatch(updateCart(updatedProduct)); // Dispatch action with updated product
@@ -200,7 +200,7 @@ const Cart = () => {
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total.toFixed(2)}</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -212,7 +212,7 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total.toFixed(2)}</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <Button>CHECKOUT NOW</Button>
           </Summary>
