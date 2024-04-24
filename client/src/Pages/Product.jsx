@@ -7,9 +7,13 @@ import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router";
 import { useState ,useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { publicRequest } from "../requestMethods";
-import { addProduct } from "../redux/cartRedux";
+import { useDispatch, useSelector } from "react-redux";
+// import { updateCartProduct } from "../redux/apiCalls";
+import {  updateCart } from "../redux/cartRedux";
+import { useNavigate } from "react-router-dom";
+import { backendCartUpdate } from "../redux/apiCalls";
+
 
 const Container = styled.div``;
 
@@ -121,36 +125,62 @@ const Button = styled.button`
 `;
 
 const Product = () => {
-  const location = useLocation();
-  const id = location.pathname.split('/')[2];
-  const [product , setProducts] = useState({});
-  const [quantity, setQuantity] = useState(1);
-  const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
-
   const dispatch = useDispatch();
+  const location = useLocation();
+  const id = location.pathname.split('/')[2].substring(1);
+  const [product , setProducts] = useState({});
+  const [quant, setQuantity] = useState(1);
+  const user = useSelector(state=>state.user.currentUser);
+  const navigate = useNavigate();
+  const cart = useSelector(state=>state.cart); 
 
   useEffect(() => {
     const getProduct = async () => {
-      const res = await publicRequest.get("products/find/" +id);
-      setProducts(res.data);
+      try{
+        const res = await publicRequest.get("products/find/" + id);
+        setProducts(res.data);
+        // console.log("completed fetching product")
+      }catch(err){
+        console.log(err);
+      }
     }
     getProduct();
   },[id]);
 
   const handleQuantity = (type)=>{
-    if(type='dec'){
-      if(quantity>1){
-        setQuantity(quantity-1);
+    if(type==='dec'){
+      if(quant>1){
+        setQuantity(quant-1);
       }
     }else{
-      setQuantity(quantity+1);
+      setQuantity(quant+1);
     }
   }
+  
+  const handleAddToCart = async () => {
+    // console.log("this is the object i am pushing in redux",{...product,quantity:quant});
+     if(user !== null) {
+      dispatch(updateCart({...product , quantity:quant}));
+      // Prepare the updated cart object to send to the backend
+    const updatedCart = {
+      userId: user._id,
+      products: [
+        ...cart.products, // Keep the existing products
+        { ...product, quantity: quant } // Add the new product with updated quantity
+      ]
+    };
+    console.log(
+      updatedCart
+    )
 
-  const handleClick = () => {
-    dispatch(addProduct({...product , quantity , color , size}));
-  }
+    // Update the cart on the backend
+    await backendCartUpdate(user._id, updatedCart);
+      console.log("cart is updated succesfully" , )
+     }
+     else navigate('/login');
+    // console.log("this is the cart", Cart.products);
+  };
+
 
   return (
     <Container>
@@ -163,31 +193,30 @@ const Product = () => {
         <InfoContainer>
           <Title>{product.title}</Title>
           <Desc>{product.desc}</Desc>
-          <Price>{product.price}</Price>
+          <Price>Rs. {product.price}</Price>
           <FilterContainer>
             <Filter>
-              <FilterTitle>Color</FilterTitle>
-              {product.color?.map((c)=>{
-                <FilterColor color={c} key={c} onClick = {()=>setColor(c)}/>
-              })}
+              <FilterTitle>Color: {product.color}</FilterTitle>
             </Filter>
             <Filter>
-              <FilterTitle>Size</FilterTitle>
-              <FilterSize onChange = {(e) => setSize(e.target.value)} >
-                {product.size?.map((s)=>{
-                  <FilterSizeOption key={s}>{s}</FilterSizeOption>
-              
-                })}
-              </FilterSize>
+              {/* <FilterTitle>Category: </FilterTitle>
+              <FilterSize>
+              {product.categories?.map((c)=>{
+                <FilterColor color={c} key={c}/>
+              })}
+              </FilterSize> */}
+            </Filter>
+            <Filter>
+              <FilterTitle>Size: {product.size}</FilterTitle>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
               <Remove onClick = {()=>handleQuantity("dec")}/>
-              <Amount>1</Amount>
+              <Amount>{quant}</Amount>
               <Add onClick = {()=>handleQuantity("inc")}/>
             </AmountContainer>
-            <Button onClick={handleClick}>ADD TO CART</Button>
+            <Button onClick={handleAddToCart}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

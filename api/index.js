@@ -7,10 +7,13 @@ const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
+const emailRoute = require("./routes/sendEmail");
 const cors = require("cors")
+const morgan = require('morgan');
+
 
 dotenv.config();
-
+app.use(morgan("tiny"));
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => console.log("DB Connection Successfull!"))
@@ -23,6 +26,7 @@ mongoose
     app.use("/api/products", productRoute);
     app.use("/api/carts", cartRoute);
     app.use("/api/orders", orderRoute);
+    app.use("/api/sendemail" , emailRoute);
     
 const port = process.env.PORT || 8000; 
 app.listen(port, () => {

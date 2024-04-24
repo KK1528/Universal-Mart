@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
 
   try {
     const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    return res.status(201).json(savedUser);
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
@@ -28,7 +28,6 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    console.log("req.body", req.body);
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
       throw new Error("Wrong credentials!"); // Throw error if user is not found

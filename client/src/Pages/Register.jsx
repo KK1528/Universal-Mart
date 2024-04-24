@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useState } from "react";
-import { register } from "../redux/apiCalls";
+import { createCart, register } from "../redux/apiCalls";
 import {useNavigate} from 'react-router-dom';
 
 const Container = styled.div`
@@ -67,11 +67,18 @@ const Register = () => {
   const [showerr , setShowerr] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e)=>{
+  const handleRegister = async (e)=>{
     e.preventDefault();
+
     if(password === confirmPassword){
-      register({username , email , password});
-      navigate('/login');
+      try {
+        const res = await register({ username, email, password });
+        createCart(res._id);
+        navigate('/login');
+      } catch (err) {
+        console.error("Error registering user:", err);
+        // Handle error if registration fails
+      }
     }else{
       setShowerr(true);
       setUsername("");

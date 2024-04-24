@@ -3,11 +3,13 @@ import Badge from "@mui/material/Badge";
 import styled from "styled-components";
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 import { Search } from "@mui/icons-material";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userRedux";
+import { setCart } from "../redux/cartRedux";
+import { backendCartUpdate } from "../redux/apiCalls";
 
 const Container = styled.div`
   height: 60px;
@@ -76,13 +78,18 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-  const user = useSelector(state=>state.user.currentUser);
-  const quantity = useSelector((state) => state.cart.quantity);
+  const user = useSelector((state) => state.user.currentUser);
+  const cart=useSelector((state)=>state.cart);
   const dispatch = useDispatch();
 
-  const handleLogout = () =>{
-    dispatch(logout());
-  }
+  const handleLogout = async() => {
+    if (user !== null) {
+
+      await backendCartUpdate(user?._id,cart)
+      dispatch(setCart({ products: [], totalQuantity: 0, total: 0 }));
+      dispatch(logout());
+    }
+  };
 
   return (
     <Container>
@@ -95,30 +102,36 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Link to='/' style={{textDecoration:'none'}}><Logo>KK</Logo></Link>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Logo>KK</Logo>
+          </Link>
         </Center>
         <Right>
           {!user && (
-            <Link to="/Register" style={{textDecoration:'none'}}>
+            <Link to="/Register" style={{ textDecoration: "none" }}>
               <MenuItem>REGISTER</MenuItem>
             </Link>
           )}
           {!user && (
-            <Link to="/Login" style={{textDecoration:'none'}}>
+            <Link to="/Login" style={{ textDecoration: "none" }}>
               <MenuItem>SIGN IN</MenuItem>
             </Link>
           )}
 
           {user && (
             <MenuItem>
-              <Badge badgeContent={quantity} color="primary">
+              <Badge badgeContent={cart.totalQuantity} color="primary">
                 <Link to="/Cart">
                   <ShoppingCartOutlined />
                 </Link>
               </Badge>
             </MenuItem>
           )}
-          {user && <MenuItem onClick={handleLogout}><LogoutIcon/></MenuItem>}
+          {user && (
+            <MenuItem onClick={handleLogout}>
+              <LogoutIcon />
+            </MenuItem>
+          )}
         </Right>
       </Wrapper>
     </Container>

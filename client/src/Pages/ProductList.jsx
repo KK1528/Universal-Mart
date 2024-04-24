@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Announcement from "../components/Announcement";
@@ -6,7 +7,6 @@ import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router";
-import { useState } from "react";
 
 const Container = styled.div``;
 
@@ -31,6 +31,16 @@ const FilterText = styled.span`
   ${mobile({ marginRight: "0px" })}
 `;
 
+const FilterTextReset = styled.span`
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 20px;
+  &:hover {
+    cursor: pointer;
+  }
+  ${mobile({ marginRight: "0px" })}
+`;
+
 const Select = styled.select`
   padding: 10px;
   margin-right: 20px;
@@ -51,6 +61,11 @@ const ProductList = () => {
       [e.target.name]: value,
     });
   };
+
+  const handleResetFilters = () => {
+    setFilters({});
+  };
+
   return (
     <Container>
       <Navbar />
@@ -84,6 +99,9 @@ const ProductList = () => {
             <Option value="asc">Price (asc)</Option>
             <Option value="desc">Price (desc)</Option>
           </Select>
+        </Filter>
+        <Filter>
+          <FilterTextReset onClick={handleResetFilters}>Reset Filters</FilterTextReset>
         </Filter>
       </FilterContainer>
       <Products cat={cat} filters={filters} sort={sort} />

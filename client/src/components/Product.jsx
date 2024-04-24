@@ -1,7 +1,9 @@
-import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
-import { Link } from '@mui/material';
-import React from 'react'
-import styled from 'styled-components';
+import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct } from "../redux/cartRedux";
 
 const Info = styled.div`
   opacity: 0;
@@ -16,7 +18,6 @@ const Info = styled.div`
   align-items: center;
   justify-content: center;
   transition: all 0.5s ease;
-  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -30,7 +31,7 @@ const Container = styled.div`
   background-color: #f5fbfd;
   position: relative;
 
-  &:hover ${Info}{
+  &:hover ${Info} {
     opacity: 1;
   }
 `;
@@ -58,32 +59,42 @@ const Icon = styled.div`
   justify-content: center;
   margin: 10px;
   transition: all 0.5s ease;
+  cursor: pointer;
   &:hover {
     background-color: #e9f5f5;
     transform: scale(1.1);
   }
 `;
 
-const Product = ({item}) => {
+const Product = ({ item }) => {
+  const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleCart = (product) => {
+    if (user !== null) {
+      dispatch(addProduct(product));
+      navigate("/cart");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <Container>
-      <Circle/>
+      <Circle />
       <Image src={item.img} />
       <Info>
-        <Icon>
-            <ShoppingCartOutlined/>
+        <Icon onClick={() => handleCart(item)}>
+          <ShoppingCartOutlined />
         </Icon>
         <Icon>
-            <Link to = {`/products/:${item._id}`}>
-              <SearchOutlined/>
-            </Link>
-        </Icon>
-        <Icon>
-            <FavoriteBorderOutlined/>
+          <Link to={`/product/:${item._id}`}>
+            <SearchOutlined />
+          </Link>
         </Icon>
       </Info>
     </Container>
-  )
-}
+  );
+};
 
-export default Product
+export default Product;

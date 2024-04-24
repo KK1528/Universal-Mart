@@ -43,10 +43,12 @@ router.delete("/:id", verifytokenandAdmin, async (req, res) => {
 //GET
 router.get("/find/:id", async (req, res) => {
     try {
+      // console.log("Product ID:", req.params.id);
       const findproduct = await product.findById(req.params.id);
+      // console.log(findproduct);
       res.status(200).json(findproduct);
     } catch (err) {
-        console.log(err);
+      // console.log(err); 
       res.status(500).json(err);
     }
   });

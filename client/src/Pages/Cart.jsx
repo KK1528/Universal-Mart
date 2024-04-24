@@ -4,8 +4,10 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCart,removeProduct } from "../redux/cartRedux";
+import { Link } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Container = styled.div``;
 
@@ -129,8 +131,24 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const navigate = useNavigate();
+  console.log(cart);
+  const handleIncrement = (product) => {
+    const updatedProduct = { ...product, quantity: product.quantity + 1 }; // Increment quantity
+    dispatch(updateCart(updatedProduct)); // Dispatch action with updated product
+  };
+
+  const handleDecrement = (product) => {
+    if (product.quantity === 1) {
+      dispatch(removeProduct(product._id));
+    } else {
+      const updatedProduct = { ...product, quantity: product.quantity - 1 };
+      dispatch(updateCart(updatedProduct));
+    }
+  };
+  
+
 
   return (
     <Container>
@@ -139,10 +157,9 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton><Link to='/'>CONTINUE SHOPPING</Link></TopButton>
           <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist (0)</TopText>
+            <TopText>Shopping Bag({cart.totalQuantity})</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
@@ -150,7 +167,7 @@ const Cart = () => {
           <Info>
             {cart.products.map((product) => {
               return (
-                <Product key= {product._id}>
+                <Product key={product._id}>
                   <ProductDetail>
                     <Image src={product.img} />
                     <Details>
@@ -158,19 +175,19 @@ const Cart = () => {
                         <b>Product:</b> {product.title}
                       </ProductName>
                       <ProductId>
-                        <b>ID:</b> {product.id}
+                        <b>ID:</b> {product._id}
                       </ProductId>
                       <ProductColor color="black" />
                       <ProductSize>
-                        <b>Size:</b> product.size
+                        <b>Size:</b> {product.size}
                       </ProductSize>
                     </Details>
                   </ProductDetail>
                   <PriceDetail>
                     <ProductAmountContainer>
-                      <Add />
+                      <Remove onClick={() => handleDecrement(product)} />
                       <ProductAmount>{product.quantity}</ProductAmount>
-                      <Remove />
+                      <Add onClick={() => handleIncrement(product)} />
                     </ProductAmountContainer>
                     <ProductPrice>$ {product.price}</ProductPrice>
                   </PriceDetail>
